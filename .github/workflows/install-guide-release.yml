@@ -1,0 +1,84 @@
+name: Install static guest guide
+on:
+  push:
+    branches: [main]
+    paths: ['.guide-release/manifest.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: install-guest-guide
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Verify and install release sources
+        run: |
+          python - <<'PY'
+          import base64, hashlib, io, json, lzma, tarfile
+          from pathlib import Path, PurePosixPath
+          p=Path('.guide-release/manifest.json')
+          if not p.exists():
+              raise SystemExit('No pending guide release; nothing to install.')
+          m=json.loads(p.read_text())
+          raw=base64.b64decode(''.join(Path(x).read_text().strip() for x in m['parts']),validate=True)
+          assert hashlib.sha256(raw).hexdigest()==m['sha256'], 'Release checksum mismatch'
+          payload={}
+          with tarfile.open(fileobj=io.BytesIO(lzma.decompress(raw)),mode='r:') as archive:
+              for entry in archive:
+                  name=entry.name
+                  assert entry.isfile() and name in m['files'], 'Unexpected archive entry'
+                  assert not PurePosixPath(name).is_absolute() and '..' not in PurePosixPath(name).parts
+                  data=archive.extractfile(entry).read()
+                  assert hashlib.sha256(data).hexdigest()==m['files'][name], 'File checksum mismatch: '+name
+                  payload[name]=data
+          assert set(payload)==set(m['files']), 'Missing files'
+          for name,data in payload.items():
+              dest=Path(name);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
+          PY
+      - name: Build and validate all languages
+        run: |
+          python -m pip install --disable-pip-version-check beautifulsoup4==4.14.3
+          python tools/build_guide.py
+          node --check guide-v3.js
+          python - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          m=json.loads(Path('.guide-release/manifest.json').read_text())
+          for name,expected in m['generated'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected, 'Generated page differs from tested release: '+name
+              soup=BeautifulSoup(Path(name).read_text(),'html.parser')
+              ids=[x['id'] for x in soup.select('[id]')]
+              assert len(ids)==len(set(ids)), 'Duplicate anchors'
+              for link in soup.select('a[href^="#"]'):
+                  assert link['href'][1:] in ids, 'Missing anchor'
+              scripts=[s.get('src') for s in soup.find_all('script')]
+              assert scripts==['guide-v3.js'], 'Unexpected active scripts'
+              for section in ['arrival','door','wifi','water','heating','house','checkout','leak','safety','help']:
+                  assert section in ids
+              for img in soup.find_all('img'):
+                  assert img.get('alt') and img.get('width') and img.get('height')
+                  if not img['src'].startswith(('https:','data:')):
+                      assert Path(img['src']).is_file(), 'Missing image'
+          assert 'MutationObserver(' not in Path('guide-v3.js').read_text()
+          print('All language pages, anchors, photos and static sections validated.')
+          PY
+      - name: Commit the tested static pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -r .guide-release
+          git add index.html no.html de.html guide-v3.css guide-v3.js README.md tools/build_guide.py assets/photos assets/wifi-qr.png
+          git commit -m 'Publish static multilingual guide with original fishing photos and no render loops'
+          git push origin HEAD:main
+      - name: Request GitHub Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
