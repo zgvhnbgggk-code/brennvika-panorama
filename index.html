@@ -11,60 +11,29 @@
 <body>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="#welcome" aria-label="Brennvika Panorama home"><img src="assets/logo.webp" alt="Skoglund Heim AS"></a>
+    <a class="brand" href="#welcome"><img src="assets/logo.webp" alt="Skoglund Heim AS"></a>
     <div class="header-actions">
-      <span class="chip language-label" aria-label="Guide language">EN</span>
-      <a class="chip primary" href="#help">Need help?</a>
+      <div class="lang-switch" aria-label="Language">
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="no">NO</button>
+        <button type="button" data-lang="de">DE</button>
+      </div>
+      <a class="chip primary" href="#help" id="needHelpTop">Need help?</a>
       <button class="chip menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuPanel">Menu</button>
     </div>
   </div>
-  <div class="desktop-nav"><nav class="wrap nav-scroll" aria-label="Guest guide">
-    <a data-nav="arrival" href="#arrival">Arrival</a>
-    <a data-nav="door" href="#door">Door</a>
-    <a data-nav="wifi" href="#wifi">Wi‑Fi</a>
-    <a data-nav="water" href="#water">Water</a>
-    <a data-nav="leak" href="#leak">Leak protection</a>
-    <a data-nav="heating" href="#heating">Heating</a>
-    <a data-nav="house" href="#house">Cabin</a>
-    <a data-nav="safety" href="#safety">Safety</a>
-    <a data-nav="checkout" href="#checkout">Checkout</a>
-    <a data-nav="explore" href="#explore">Explore Hamarøy</a>
-  </nav></div>
+  <div class="desktop-nav"><nav class="wrap nav-scroll" id="desktopNav" aria-label="Guest guide"></nav></div>
 </header>
-<div class="menu-panel" id="menuPanel"><nav>
-  <a href="#arrival">Arrival &amp; directions <span>→</span></a>
-  <a href="#door">Door code <span>→</span></a>
-  <a href="#wifi">Wi‑Fi &amp; Starlink <span>→</span></a>
-  <a href="#water">Drinking water &amp; A2G <span>→</span></a>
-  <a href="#leak">Water leak protection <span>→</span></a>
-  <a href="#heating">Heating &amp; lighting <span>→</span></a>
-  <a href="#house">Kitchen &amp; laundry <span>→</span></a>
-  <a href="#safety">Safety <span>→</span></a>
-  <a href="#checkout">Checkout <span>→</span></a>
-  <a href="#explore">Explore Hamarøy <span>→</span></a>
-  <a href="#help">Contact <span>→</span></a>
-</nav></div>
+<div class="menu-panel" id="menuPanel"><nav id="menuNav"></nav></div>
 <section class="hero" id="welcome">
-  <img class="hero-bg" src="assets/hero.webp" alt="Brennvika Panorama">
-  <div class="hero-shade"></div>
-  <div class="hero-inner">
-    <div class="kicker">Brennvika · Hamarøy · Northern Norway</div>
-    <h1>Welcome to Brennvika Panorama</h1>
-    <p>Everything you need for your stay — practical cabin information, safety instructions and a detailed guide to experiencing Hamarøy.</p>
-    <div class="hero-meta"><a href="#arrival">Start with arrival</a><a href="#water">Drinking water</a><a href="#checkout">Checkout</a></div>
-  </div>
+  <div class="hero-art" aria-hidden="true"><span class="ridge ridge-a"></span><span class="ridge ridge-b"></span><span class="ridge ridge-c"></span></div>
+  <div class="hero-inner"><div class="kicker" id="heroKicker"></div><h1 id="heroTitle"></h1><p id="heroLead"></p><div class="hero-meta" id="heroMeta"></div></div>
 </section>
-<div class="quick-strip"><div class="wrap"><div class="quick-grid">
-  <div class="quick-item"><small>Check-in</small><strong>See your booking confirmation</strong></div>
-  <div class="quick-item"><small>Checkout</small><strong>By 11:00</strong></div>
-  <div class="quick-item"><small>Address</small><strong>Brennvikveien 37<br>8294 Hamarøy</strong></div>
-  <div class="quick-item"><small>Door code</small><strong>33 + last 4 digits of your booking phone number</strong></div>
-  <div class="quick-item warn"><small>Important</small><strong>Do not drink directly from the taps</strong></div>
-</div></div></div>
-<main id="content"><section class="section"><div class="wrap"><div class="card wide"><h3>Loading guest guide…</h3><p>The practical information will appear here in a moment.</p></div></div></section></main>
-<footer class="footer"><div class="wrap footer-grid"><div><img src="assets/logo.webp" alt="Skoglund Heim AS"><h3>Brennvika Panorama</h3><p>Brennvikveien 37 · 8294 Hamarøy · Norway</p><small>Guest guide maintained by Skoglund Heim AS.</small></div><div><h3>Quick links</h3><p><a href="#door">Door code</a><br><a href="#water">Drinking water</a><br><a href="#checkout">Checkout</a><br><a href="#help">Contact &amp; emergency</a></p></div></div></footer>
-<nav class="toc-mobile" aria-label="Quick navigation"><a data-nav="arrival" href="#arrival">Arrival</a><a data-nav="water" href="#water">Water</a><a data-nav="checkout" href="#checkout">Checkout</a><a data-nav="help" href="#help">Help</a></nav>
-<a class="sticky-help" href="#help">Need help?</a>
+<div class="quick-strip"><div class="wrap"><div class="quick-grid" id="quickGrid"></div></div></div>
+<main id="content"><section class="section"><div class="wrap"><div class="card wide"><h3>Loading guest guide…</h3></div></div></section></main>
+<footer class="footer"><div class="wrap footer-grid"><div><img src="assets/logo.webp" alt="Skoglund Heim AS"><h3>Brennvika Panorama</h3><p id="footerAddress"></p><small id="footerMaintained"></small></div><div><h3 id="footerQuickTitle"></h3><p id="footerLinks"></p></div></div></footer>
+<nav class="toc-mobile" id="mobileNav" aria-label="Quick navigation"></nav>
+<a class="sticky-help" href="#help" id="stickyHelp">Need help?</a>
 <script src="app.js"></script>
 </body>
 </html>
