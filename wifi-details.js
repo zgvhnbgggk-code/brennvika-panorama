@@ -3,9 +3,9 @@
   const PASSWORD='Halibut2026!';
   const QR='data:image/png;base64,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';
   const copy={
-    en:{title:'Wi‑Fi access',ssid:'Network',password:'Password',scan:'Scan to connect',note:'Scan the QR code with your phone camera, or enter the network name and password manually.',alt:'QR code for Brennvika guest Wi‑Fi'},
-    no:{title:'Wi‑Fi-tilgang',ssid:'Nettverk',password:'Passord',scan:'Skann for å koble til',note:'Skann QR-koden med mobilkameraet, eller skriv inn nettverksnavn og passord manuelt.',alt:'QR-kode for gjestenettet i Brennvika'},
-    de:{title:'Wi‑Fi-Zugang',ssid:'Netzwerk',password:'Passwort',scan:'Zum Verbinden scannen',note:'Scannen Sie den QR-Code mit der Handykamera oder geben Sie Netzwerkname und Passwort manuell ein.',alt:'QR-Code für das Gäste-WLAN in Brennvika'}
+    en:{title:'Wi‑Fi access',ssid:'Network',password:'Password',scan:'Scan to connect',note:'Scan the QR code with your phone camera, or enter the network name and password manually.',alt:'QR code for Brennvika guest Wi‑Fi',quick:'Brennvika · scan QR below'},
+    no:{title:'Wi‑Fi-tilgang',ssid:'Nettverk',password:'Passord',scan:'Skann for å koble til',note:'Skann QR-koden med mobilkameraet, eller skriv inn nettverksnavn og passord manuelt.',alt:'QR-kode for gjestenettet i Brennvika',quick:'Brennvika · QR-kode nedenfor'},
+    de:{title:'Wi‑Fi-Zugang',ssid:'Netzwerk',password:'Passwort',scan:'Zum Verbinden scannen',note:'Scannen Sie den QR-Code mit der Handykamera oder geben Sie Netzwerkname und Passwort manuell ein.',alt:'QR-Code für das Gäste-WLAN in Brennvika',quick:'Brennvika · QR-Code unten'}
   };
   function lang(){const l=document.documentElement.lang;return l==='nb'?'no':l==='de'?'de':'en';}
   function addStyles(){
@@ -15,9 +15,12 @@
     document.head.appendChild(s);
   }
   function render(){
-    addStyles();const wifi=document.querySelector('#wifi');if(!wifi)return;
-    const card=wifi.querySelector('.card.wide.blue')||wifi.querySelector('.card.wide');if(!card)return;
+    addStyles();
     const c=copy[lang()];
+    const quick=[...document.querySelectorAll('#quickGrid .quick-item')].find(x=>(x.querySelector('small')?.textContent||'').trim()==='Wi‑Fi');
+    if(quick){const strong=quick.querySelector('strong');if(strong&&strong.textContent!==c.quick)strong.textContent=c.quick;}
+    const wifi=document.querySelector('#wifi');if(!wifi)return;
+    const card=wifi.querySelector('.card.wide.blue')||wifi.querySelector('.card.wide');if(!card)return;
     card.innerHTML=`<div class="wifi-live"><div><h3>${c.title}</h3><div class="wifi-credentials"><div class="wifi-credential"><small>${c.ssid}</small><strong>${SSID}</strong></div><div class="wifi-credential"><small>${c.password}</small><strong>${PASSWORD}</strong></div></div><p>${c.note}</p></div><div class="wifi-qr"><img src="${QR}" alt="${c.alt}" width="444" height="444"><small>${c.scan}</small></div></div>`;
   }
   const content=document.getElementById('content');if(content)new MutationObserver(render).observe(content,{childList:true,subtree:true});render();
