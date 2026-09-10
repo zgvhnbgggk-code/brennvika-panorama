@@ -42,7 +42,8 @@
       const card=highlights[2];
       const title=card.querySelector('strong');
       const desc=[...card.querySelectorAll('span')].find(x=>!x.classList.contains('highlight-no'));
-      if(title)title.textContent=c.highlightTitle;if(desc)desc.textContent=c.highlightText;
+      if(title)title.textContent=c.highlightTitle;
+      if(desc)desc.textContent=c.highlightText;
     }
 
     explore.querySelector('.aurora-static')?.remove();
@@ -62,6 +63,8 @@
   }
 
   function waitForGuide(){let tries=0;const timer=setInterval(()=>{tries++;if(apply()||tries>=40)clearInterval(timer)},125)}
+  function reapplyAfterLanguageChange(){[150,450,900,1600].forEach(ms=>setTimeout(waitForGuide,ms));}
+
   waitForGuide();
-  document.querySelectorAll('.lang-switch button').forEach(btn=>btn.addEventListener('click',()=>setTimeout(waitForGuide,25)));
+  document.querySelectorAll('.lang-switch button').forEach(btn=>btn.addEventListener('click',reapplyAfterLanguageChange));
 })();
