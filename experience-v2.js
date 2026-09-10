@@ -86,8 +86,11 @@
   function apply(){
     setupHero();
     const explore=document.querySelector('#explore .wrap');if(!explore)return;
-    const c=COPY[lang()];
+    const current=lang();
+    if(explore.dataset.experiencePatch===current)return;
+    const c=COPY[current];
     enhanceTranoy(explore,c);enhanceGlimma(explore,c);addArt(explore,c);
+    explore.dataset.experiencePatch=current;
   }
 
   const style=document.createElement('style');style.textContent=`
@@ -99,5 +102,7 @@
     @media(max-width:720px){.hero-photo-credit{left:16px;right:auto;bottom:10px;max-width:calc(100% - 32px);white-space:normal}.experience-links a{width:100%;justify-content:center}}
   `;document.head.appendChild(style);
 
-  const obs=new MutationObserver(apply);obs.observe(document.body,{childList:true,subtree:true,characterData:true});apply();
+  const content=document.querySelector('#content');
+  if(content){const obs=new MutationObserver(()=>requestAnimationFrame(apply));obs.observe(content,{childList:true});}
+  apply();
 })();
