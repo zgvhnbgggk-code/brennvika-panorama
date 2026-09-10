@@ -10,8 +10,8 @@
 .positive-head h2,.practical-head h2{font-size:clamp(32px,4.5vw,52px);line-height:1;letter-spacing:-.04em;margin:0}
 .positive-head p,.practical-head p{margin:0;color:var(--muted);font-size:17px;max-width:680px}
 .highlight-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.highlight-card{background:rgba(255,253,249,.82);border:1px solid var(--line);border-radius:21px;padding:22px 19px;min-height:152px;box-shadow:0 14px 38px rgba(12,37,46,.06)}
-.highlight-card .highlight-no{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#e4efed;color:var(--green);font-size:12px;font-weight:950;margin-bottom:18px}
+.highlight-card{background:rgba(255,253,249,.82);border:1px solid var(--line);border-radius:21px;padding:22px 19px;min-height:132px;box-shadow:0 14px 38px rgba(12,37,46,.06)}
+.highlight-card .highlight-no{display:none!important}
 .highlight-card strong{display:block;font-size:17px;line-height:1.2;margin-bottom:7px}
 .highlight-card span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
 
@@ -30,11 +30,11 @@ main{padding-top:28px}
 .footer{padding-top:44px}
 .feature-place img{background:#e1ddd3}
 
-@media(max-width:1000px){.highlight-grid{grid-template-columns:repeat(3,1fr)}.highlight-card:nth-child(4),.highlight-card:nth-child(5){min-height:135px}}
+@media(max-width:1000px){.highlight-grid{grid-template-columns:repeat(3,1fr)}.highlight-card:nth-child(4),.highlight-card:nth-child(5){min-height:120px}}
 @media(max-width:720px){
  .hero{min-height:445px}.hero-inner{padding-top:82px;padding-bottom:50px}.hero h1{font-size:46px}
  .welcome-highlights{padding:36px 0 26px}.positive-head,.practical-head{grid-template-columns:1fr;gap:9px}.positive-head p,.practical-head p{font-size:15px}
- .highlight-grid{grid-template-columns:1fr 1fr}.highlight-card{min-height:140px;padding:18px 16px}.highlight-card:last-child{grid-column:1/-1;min-height:auto}
+ .highlight-grid{grid-template-columns:1fr 1fr}.highlight-card{min-height:120px;padding:18px 16px}.highlight-card:last-child{grid-column:1/-1;min-height:auto}
  .at-glance{padding-top:26px}.quick-grid{margin-top:15px}
 }
 @media(max-width:460px){.highlight-grid{grid-template-columns:1fr}.highlight-card:last-child{grid-column:auto}.highlight-card{min-height:auto}.brand img{width:138px!important;height:auto!important}}
