@@ -2,7 +2,7 @@ name: Install static guest guide
 on:
   push:
     branches: [main]
-    paths: ['.guide-release/manifest.json']
+    paths: ['.guide-release/manifest.json', '.github/workflows/install-guide-release.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -64,7 +64,8 @@ jobs:
               for section in ['arrival','door','wifi','water','heating','house','checkout','leak','safety','help']:
                   assert section in ids
               for img in soup.find_all('img'):
-                  assert img.get('alt') and img.get('width') and img.get('height')
+                  assert img.has_attr('alt') and img.get('width') and img.get('height'), 'Missing image accessibility or dimensions'
+                  assert img['alt'] or 'hero-photo' in img.get('class',[]), 'Only the decorative hero may have empty alternative text'
                   if not img['src'].startswith(('https:','data:')):
                       assert Path(img['src']).is_file(), 'Missing image'
           assert 'MutationObserver(' not in Path('guide-v3.js').read_text()
