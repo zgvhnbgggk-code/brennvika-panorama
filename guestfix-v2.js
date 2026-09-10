@@ -28,17 +28,23 @@
   function patchArrival(){
     const section=document.querySelector('#arrival');
     if(!section) return;
+    const current=lang();
+    if(section.dataset.speedPatch===current) return;
     const lists=[...section.querySelectorAll('.card ol.steps')];
     if(!lists.length) return;
-    const driveList=lists[0];
-    const items=driveList.querySelectorAll('li');
-    if(items.length>1) items[1].innerHTML=TEXT[lang()].speed;
+    const items=lists[0].querySelectorAll('li');
+    if(items.length>1){
+      items[1].innerHTML=TEXT[current].speed;
+      section.dataset.speedPatch=current;
+    }
   }
 
   function patchLeak(){
     const section=document.querySelector('#leak');
     if(!section) return;
-    const c=TEXT[lang()];
+    const current=lang();
+    if(section.dataset.leakPatch===current) return;
+    const c=TEXT[current];
     const oldDiagram=section.querySelector('.aqualarm-diagram');
     if(oldDiagram) oldDiagram.remove();
     const aqualarm=section.querySelector('.aqualarm');
@@ -50,10 +56,13 @@
       const warning=section.querySelector('.card.wide.warning');
       if(warning) warning.appendChild(block);
     }
-    block.innerHTML=`
-      <div class="video-copy"><h3>${c.videoTitle}</h3><p>${c.videoText}</p></div>
-      <div class="video-frame"><iframe src="https://player.vimeo.com/video/725950724" title="${c.videoTitle}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
-      <a class="manual-link" href="https://vimeo.com/725950724" target="_blank" rel="noopener">${c.videoLink}</a>`;
+    if(block){
+      block.innerHTML=`
+        <div class="video-copy"><h3>${c.videoTitle}</h3><p>${c.videoText}</p></div>
+        <div class="video-frame"><iframe src="https://player.vimeo.com/video/725950724" title="${c.videoTitle}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <a class="manual-link" href="https://vimeo.com/725950724" target="_blank" rel="noopener">${c.videoLink}</a>`;
+      section.dataset.leakPatch=current;
+    }
   }
 
   function apply(){ patchArrival(); patchLeak(); }
@@ -72,7 +81,7 @@
   const content=document.querySelector('#content');
   if(content){
     const observer=new MutationObserver(()=>requestAnimationFrame(apply));
-    observer.observe(content,{childList:true,subtree:true});
+    observer.observe(content,{childList:true});
   }
   apply();
 })();
