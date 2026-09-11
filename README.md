@@ -1,4 +1,4 @@
-# Brennvika Panorama — gjesteguide
+# Brennvik panorama — gjesteguide
 
 Statisk, mobiltilpasset gjesteguide på engelsk (`index.html`), norsk (`no.html`) og tysk (`de.html`), publisert fra `main` med GitHub Pages.
 

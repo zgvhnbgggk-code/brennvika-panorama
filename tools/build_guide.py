@@ -176,3 +176,13 @@ def build(lang,c):
 if __name__=='__main__':
  for l,c in DATA.items():
   p=build(l,c);print(p.name,len(p.read_bytes()))
+
+
+# BP_BRAND_NAME_V1
+# Canonical brand spelling: Norwegian = Brennvik panorama; English/German = Brennvik Panorama.
+for _page,_brand in (("index.html","Brennvik Panorama"),("no.html","Brennvik panorama"),("de.html","Brennvik Panorama")):
+    _p=ROOT/_page
+    if _p.exists():
+        _t=_p.read_text()
+        _t=_t.replace("Brennvika Panorama",_brand).replace("Brennvika",_brand)
+        _p.write_text(_t)

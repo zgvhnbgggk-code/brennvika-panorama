@@ -6,7 +6,7 @@
   const copy=event.target.closest('[data-copy],#copyAddress');
   if(copy){
    const target=copy.dataset.copy?document.getElementById(copy.dataset.copy):null;
-   const text=target?target.textContent:'Brennvika Panorama, Brennvikveien 37, 8294 Hamarøy, Norway';
+   const text=target?target.textContent:'Brennvik Panorama, Brennvikveien 37, 8294 Hamarøy, Norway';
    const status=copy.parentElement.querySelector('[role="status"]');
    try{
     if(!navigator.clipboard)throw new Error('clipboard unavailable');
