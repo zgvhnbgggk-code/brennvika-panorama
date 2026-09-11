@@ -5,21 +5,35 @@
 }
 
 
-/* BP visual explore cards: local, lazy-loaded imagery without sacrificing load speed. */
+/* BP visual explore cards v2: precise real imagery, deferred until near viewport. */
 .brand-logo-link{display:flex;align-items:center;min-width:180px;max-width:245px}
 .brand-logo{display:block;width:auto;height:54px;max-width:100%;object-fit:contain;object-position:left center}
 .other-ideas details.visual-place summary{padding:0;display:grid;grid-template-columns:128px minmax(0,1fr) auto;gap:18px;align-items:center;min-height:112px;overflow:hidden}
-.visual-place .place-summary-media{display:block;align-self:stretch;min-height:112px;background:var(--paper2);overflow:hidden}
-.visual-place .place-summary-media img{width:100%;height:100%;min-height:112px;object-fit:cover}
+.visual-place .place-summary-media{display:grid;grid-template-columns:1fr;align-self:stretch;min-height:112px;background:linear-gradient(135deg,#dfe8e5,#edf1ec);overflow:hidden}
+.visual-place .place-summary-media.media-pair{grid-template-columns:1fr 1fr;gap:2px}
+.visual-place .place-summary-media img{width:100%;height:100%;min-height:112px;object-fit:cover;opacity:0;transition:opacity .18s ease}
+.visual-place .place-summary-media img.remote-loaded{opacity:1}
+.visual-place .place-summary-media.remote-failed{background:linear-gradient(135deg,#e6e8e1,#f2eee6)}
 .visual-place .place-summary-title{padding:19px 0;font-weight:800;line-height:1.35}
 .other-ideas details.visual-place summary::after{margin-right:20px}
-.visual-photo-credit{margin-top:14px!important}
+.visual-photo-credit{margin-top:14px!important;font-size:10px!important;line-height:1.55!important}
+.visual-photo-credit a+a{margin-left:8px}
+.other-ideas details.grocery-place summary{grid-template-columns:minmax(0,1fr) auto;padding:22px 20px;min-height:88px}
+.grocery-place .place-summary-title{padding:0}
+.grocery-place .grocery-badge{display:inline-flex;margin-left:10px;padding:3px 8px;border-radius:999px;background:var(--bluewash);color:var(--sea);font-size:10px;letter-spacing:.08em;font-weight:800;vertical-align:middle}
+.store-list{display:grid;gap:12px;margin-top:18px}
+.store-row{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px}
+.store-row strong,.store-row small{display:block}.store-row small{color:var(--muted);margin-top:3px;line-height:1.55}
+.store-map-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.store-map-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border:1px solid var(--ink);border-radius:7px;text-decoration:none;font-size:12px;font-weight:700}
+.store-map-actions a:first-child{background:var(--ink);color:#fff}
 @media(max-width:700px){
  .brand-logo-link{min-width:138px;max-width:180px}.brand-logo{height:44px}
  .other-ideas details.visual-place summary{grid-template-columns:108px minmax(0,1fr) auto;gap:14px;min-height:105px}
  .visual-place .place-summary-media,.visual-place .place-summary-media img{min-height:105px}
  .visual-place .place-summary-title{padding:15px 0;font-size:14px}
  .other-ideas details.visual-place summary::after{margin-right:15px}
+ .other-ideas details.grocery-place summary{grid-template-columns:minmax(0,1fr) auto;padding:20px 16px;min-height:82px}
 }
 @media(max-width:390px){
  .other-ideas details.visual-place summary{grid-template-columns:94px minmax(0,1fr) auto;gap:12px}
