@@ -3,3 +3,25 @@
 @supports (content-visibility:auto){
   .more-experiences,.day-story,.practical-intro~.section,.closing-section,.footer{content-visibility:auto;contain-intrinsic-size:auto 760px}
 }
+
+
+/* BP visual explore cards: local, lazy-loaded imagery without sacrificing load speed. */
+.brand-logo-link{display:flex;align-items:center;min-width:180px;max-width:245px}
+.brand-logo{display:block;width:auto;height:54px;max-width:100%;object-fit:contain;object-position:left center}
+.other-ideas details.visual-place summary{padding:0;display:grid;grid-template-columns:128px minmax(0,1fr) auto;gap:18px;align-items:center;min-height:112px;overflow:hidden}
+.visual-place .place-summary-media{display:block;align-self:stretch;min-height:112px;background:var(--paper2);overflow:hidden}
+.visual-place .place-summary-media img{width:100%;height:100%;min-height:112px;object-fit:cover}
+.visual-place .place-summary-title{padding:19px 0;font-weight:800;line-height:1.35}
+.other-ideas details.visual-place summary::after{margin-right:20px}
+.visual-photo-credit{margin-top:14px!important}
+@media(max-width:700px){
+ .brand-logo-link{min-width:138px;max-width:180px}.brand-logo{height:44px}
+ .other-ideas details.visual-place summary{grid-template-columns:108px minmax(0,1fr) auto;gap:14px;min-height:105px}
+ .visual-place .place-summary-media,.visual-place .place-summary-media img{min-height:105px}
+ .visual-place .place-summary-title{padding:15px 0;font-size:14px}
+ .other-ideas details.visual-place summary::after{margin-right:15px}
+}
+@media(max-width:390px){
+ .other-ideas details.visual-place summary{grid-template-columns:94px minmax(0,1fr) auto;gap:12px}
+ .visual-place .place-summary-title{font-size:13px}
+}
