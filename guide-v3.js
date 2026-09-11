@@ -1,5 +1,5 @@
 /* Progressive enhancement only. Content, menus and language pages work without JS.
-   No MutationObserver, polling, content fetches, framework, analytics or autoplay. */
+   No DOM observer loops, polling, content fetches, framework, analytics or autoplay. */
 (()=>{'use strict';
  const menu=document.querySelector('.guide-menu');
  document.addEventListener('click',async event=>{
