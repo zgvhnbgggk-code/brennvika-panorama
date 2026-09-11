@@ -1,0 +1,157 @@
+name: Add explore card images and restore logo
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/add-explore-card-images.yml']
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: add-explore-card-images
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Add two lightweight real photographs
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check pillow beautifulsoup4
+          mkdir -p /tmp/guidephotos assets/photos
+          curl -fL --retry 3 --connect-timeout 10 --max-time 45 -A 'Mozilla/5.0 BrennvikaGuide/1.0' 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Lakseoppdrett.jpg?width=800' -o /tmp/guidephotos/salmon.jpg
+          curl -fL --retry 3 --connect-timeout 10 --max-time 45 -A 'Mozilla/5.0 BrennvikaGuide/1.0' 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Interior%20from%20Sulitjelma%20Coop%20shop.jpg?width=800' -o /tmp/guidephotos/grocery.jpg
+          python - <<'PY'
+          from PIL import Image, ImageOps
+          from pathlib import Path
+          for src,dst in [('salmon.jpg','salmon-farm.webp'),('grocery.jpg','grocery-store.webp')]:
+              im=Image.open('/tmp/guidephotos/'+src)
+              im=ImageOps.exif_transpose(im).convert('RGB')
+              im.thumbnail((800,600),Image.Resampling.LANCZOS)
+              im.save('assets/photos/'+dst,'WEBP',quality=76,method=6)
+              print(dst,Path('assets/photos/'+dst).stat().st_size,im.size)
+          PY
+      - name: Make logo and visual cards part of the static builder
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/build_guide.py')
+          s=p.read_text()
+          marker='# BP_VISUAL_CARDS_V1'
+          if marker not in s:
+              s += r'''
+
+# BP_VISUAL_CARDS_V1
+# Keep the real Skoglund Heim logo in the header and give the compact explore cards
+# lightweight local photographs. This post-processes the three static outputs only.
+_VISUAL_IMAGES=[
+ ('assets/photos/coast-summer.avif',(1000,786)),
+ ('assets/photos/tranoy-lighthouse.webp',(1100,725)),
+ ('assets/photos/salmon-farm.webp',(603,360)),
+ ('assets/photos/aurora.webp',(960,640)),
+ ('assets/photos/grocery-store.webp',(521,380)),
+ ('assets/photos/hamaroyskaftet.webp',(1100,825)),
+]
+_VISUAL_CREDITS=[
+ None,
+ None,
+ ('Photo: Marius Fiskum / Wikimedia Commons · CC BY 3.0','https://commons.wikimedia.org/wiki/File:Lakseoppdrett.jpg'),
+ None,
+ ('Photo: Wikimedia Commons · Sulitjelma Coop shop','https://commons.wikimedia.org/wiki/File:Interior_from_Sulitjelma_Coop_shop.jpg'),
+ None,
+]
+for _page in ('index.html','no.html','de.html'):
+ _path=ROOT/_page
+ _doc=BeautifulSoup(_path.read_text(),'html.parser')
+ _brand=_doc.select_one('a.wordmark')
+ if _brand:
+  _brand.clear()
+  _brand['class']=['wordmark','brand-logo-link']
+  _logo=_doc.new_tag('img',src='assets/logo.webp',alt='Skoglund Heim AS',width='260',height='88')
+  _logo['class']=['brand-logo']
+  _brand.append(_logo)
+ _cards=_doc.select('.other-ideas > details.place')
+ for _card,(_src,(_w,_h)),_credit in zip(_cards,_VISUAL_IMAGES,_VISUAL_CREDITS):
+  _card['class']=list(dict.fromkeys(_card.get('class',[])+['visual-place']))
+  _summary=_card.find('summary',recursive=False)
+  if not _summary: continue
+  _title=_summary.get_text(' ',strip=True)
+  _summary.clear()
+  _media=_doc.new_tag('span');_media['class']=['place-summary-media']
+  _img=_doc.new_tag('img',src=_src,alt='',width=str(_w),height=str(_h),loading='lazy',decoding='async')
+  _img['fetchpriority']='low'
+  _media.append(_img)
+  _label=_doc.new_tag('span');_label['class']=['place-summary-title'];_label.string=_title
+  _summary.append(_media);_summary.append(_label)
+  if _credit:
+   _body=_card.select_one('.detail-body')
+   if _body and not _body.select_one('.visual-photo-credit'):
+    _cp=_doc.new_tag('p');_cp['class']=['photo-credit','visual-photo-credit']
+    _a=_doc.new_tag('a',href=_credit[1],target='_blank',rel='noopener noreferrer');_a.string=_credit[0]+' ↗'
+    _cp.append(_a);_body.append(_cp)
+ _path.write_text(str(_doc))
+'''
+              p.write_text(s)
+          css=Path('guide-v3.css')
+          c=css.read_text()
+          if 'BP visual explore cards' not in c:
+              c += r'''
+
+/* BP visual explore cards: compact imagery without sacrificing load speed. */
+.brand-logo-link{display:flex;align-items:center;min-width:180px;max-width:245px}
+.brand-logo{display:block;width:auto;height:54px;max-width:100%;object-fit:contain;object-position:left center}
+.other-ideas details.visual-place summary{padding:0;display:grid;grid-template-columns:128px minmax(0,1fr) auto;gap:18px;align-items:center;min-height:112px;overflow:hidden}
+.visual-place .place-summary-media{display:block;align-self:stretch;min-height:112px;background:var(--paper2);overflow:hidden}
+.visual-place .place-summary-media img{width:100%;height:100%;min-height:112px;object-fit:cover}
+.visual-place .place-summary-title{padding:19px 0;font-weight:800;line-height:1.35}
+.other-ideas details.visual-place summary::after{margin-right:20px}
+.visual-photo-credit{margin-top:14px!important}
+@media(max-width:700px){
+ .brand-logo-link{min-width:138px;max-width:180px}.brand-logo{height:44px}
+ .other-ideas details.visual-place summary{grid-template-columns:108px minmax(0,1fr) auto;gap:14px;min-height:105px}
+ .visual-place .place-summary-media,.visual-place .place-summary-media img{min-height:105px}
+ .visual-place .place-summary-title{padding:15px 0;font-size:14px}
+ .other-ideas details.visual-place summary::after{margin-right:15px}
+}
+@media(max-width:390px){.other-ideas details.visual-place summary{grid-template-columns:94px minmax(0,1fr) auto;gap:12px}.visual-place .place-summary-title{font-size:13px}}
+'''
+              css.write_text(c)
+          PY
+      - name: Rebuild and validate
+        run: |
+          set -euo pipefail
+          python tools/build_guide.py
+          node --check guide-v3.js
+          python - <<'PY'
+          from bs4 import BeautifulSoup
+          from pathlib import Path
+          for name in ['index.html','no.html','de.html']:
+              soup=BeautifulSoup(Path(name).read_text(),'html.parser')
+              logo=soup.select_one('.brand-logo')
+              assert logo and logo.get('src')=='assets/logo.webp',name
+              cards=soup.select('.other-ideas > details.visual-place')
+              assert len(cards)>=6,(name,len(cards))
+              for card in cards[:6]:
+                  img=card.select_one('summary .place-summary-media img')
+                  assert img and Path(img['src']).is_file(),(name,img)
+                  assert img.get('loading')=='lazy'
+              remote=[i.get('src') for i in soup.find_all('img') if i.get('src','').startswith(('http://','https://'))]
+              assert not remote,(name,remote)
+              print(name,'visual cards',len(cards))
+          PY
+      - name: Commit and publish
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/add-explore-card-images.yml
+          git add tools/build_guide.py guide-v3.css index.html no.html de.html assets/photos/salmon-farm.webp assets/photos/grocery-store.webp
+          git commit -m 'Restore Skoglund Heim logo and add images to explore cards'
+          git push origin HEAD:main
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
