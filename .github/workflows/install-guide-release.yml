@@ -2,7 +2,7 @@ name: Install static guest guide
 on:
   push:
     branches: [main]
-    paths: ['.guide-release/manifest.json', '.github/workflows/install-guide-release.yml']
+    paths: ['.guide-release/manifest.json']
   workflow_dispatch:
 permissions:
   contents: write
