@@ -1,0 +1,76 @@
+name: Apply precise real explore cards
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-real-explore.yml']
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: apply-real-explore
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Build and apply precise cards
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check beautifulsoup4==4.14.3
+          python tools/build_guide.py
+          python tools/add_visual_cards.py
+          node --check guide-v3.js
+      - name: Validate accuracy and load behaviour
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          for name in ['index.html','no.html','de.html']:
+              soup=BeautifulSoup(Path(name).read_text(),'html.parser')
+              logo=soup.select_one('.brand-logo[src="assets/logo.webp"]')
+              assert logo, name
+              cards=soup.select('.other-ideas > details.visual-place')[:6]
+              assert len(cards)==6,(name,len(cards))
+              expected=[1,1,1,2,0,1]
+              urls=[]
+              for i,(card,count) in enumerate(zip(cards,expected)):
+                  imgs=card.select('summary img[data-src]')
+                  assert len(imgs)==count,(name,i,len(imgs),count)
+                  assert not any(img.get('src','').startswith(('http://','https://')) for img in imgs),(name,i)
+                  urls.extend(img['data-src'] for img in imgs)
+              assert len(urls)==len(set(urls)),(name,'duplicate explore photos')
+              grocery=cards[4]
+              assert not grocery.select('summary img'),name
+              text=grocery.get_text(' ',strip=True)
+              assert '24/7' in text,(name,text)
+              links=[a.get('href','') for a in grocery.select('.store-map-actions a')]
+              assert sum('google.com/maps' in x for x in links)==2,(name,links)
+              assert sum('maps.apple.com' in x for x in links)==2,(name,links)
+              html=Path(name).read_text()
+              assert 'grocery-store.webp' not in html
+              assert 'salmon-farm.webp' not in html
+              assert 'imagegen' not in html.lower() and 'dall-e' not in html.lower()
+              print(name,'ok · deferred real photos',len(urls),'· grocery map links',len(links))
+          js=Path('guide-v3.js').read_text()
+          assert 'IntersectionObserver' in js
+          assert 'MutationObserver(' not in js
+          PY
+      - name: Commit published guide
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/apply-real-explore.yml
+          git rm -f assets/photos/salmon-farm.webp assets/photos/grocery-store.webp || true
+          git add index.html no.html de.html guide-v3.css guide-v3.js tools/add_visual_cards.py .github/workflows/install-guide-release.yml
+          git commit -m 'Use precise real photos and map links in explore guide'
+          git push origin HEAD:main
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
