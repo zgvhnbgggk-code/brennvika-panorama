@@ -28,12 +28,31 @@
   if(menu&&menu.open&&(event.target.closest('.guide-menu a')||!menu.contains(event.target)))menu.open=false;
  });
  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu&&menu.open){menu.open=false;menu.querySelector('summary').focus()}});
- // Images from public collections must never block the practical guide.
+
+ // Existing local collection photos must never block the practical guide.
  document.querySelectorAll('.photo-frame img').forEach(img=>{
-  const fail=()=>{if(img.closest('.photo-frame').querySelector('.photo-fallback'))img.closest('.photo-frame').classList.add('failed')};
+  const fail=()=>{const frame=img.closest('.photo-frame');if(frame&&frame.querySelector('.photo-fallback'))frame.classList.add('failed')};
   img.addEventListener('error',fail,{once:true});
   if(img.complete&&!img.naturalWidth)fail();
  });
+
+ // Precise real-world explore photographs live on their original source sites.
+ // Keep initial page load fast by assigning their URLs only when the card is near view.
+ const remote=[...document.querySelectorAll('img[data-src]')];
+ const loadRemote=img=>{
+  const src=img.dataset.src;if(!src)return;
+  const media=img.closest('.place-summary-media');
+  img.addEventListener('load',()=>img.classList.add('remote-loaded'),{once:true});
+  img.addEventListener('error',()=>{if(media)media.classList.add('remote-failed')},{once:true});
+  img.src=src;delete img.dataset.src;
+ };
+ if(remote.length){
+  if('IntersectionObserver' in window){
+   const io=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){loadRemote(entry.target);io.unobserve(entry.target)}})},{rootMargin:'450px 0px'});
+   remote.forEach(img=>io.observe(img));
+  }else remote.forEach(loadRemote);
+ }
+
  // Open any collapsed ancestor when following an existing deep link.
  function reveal(){let id;try{id=decodeURIComponent(location.hash.slice(1))}catch{return}if(!id)return;const node=document.getElementById(id);if(!node)return;let p=node.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement}}
  window.addEventListener('hashchange',reveal);reveal();
