@@ -104,16 +104,16 @@ DATA={
  'links':[('arrival','Anreise & Wegbeschreibung'),('door','Türcode'),('wifi','WLAN'),('water','Trinkwasser & A2G'),('heating','Heizung & Licht'),('house','Küche, Wäsche & Abfall'),('checkout','Check-out'),('leak','Leckageschutz'),('safety','Sicherheit'),('help','Kontakt & Notfall')]
 }}
 E=html.escape
-AURORA='https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Northern_lights_curtains_and_beams_over_Nordmo_in_Bjerkvik%2C_Narvik%2C_Nordland%2C_Norway%2C_2023_September_-_3.jpg/960px-Northern_lights_curtains_and_beams_over_Nordmo_in_Bjerkvik%2C_Narvik%2C_Nordland%2C_Norway%2C_2023_September_-_3.jpg'
+AURORA='assets/photos/aurora.webp'
 AURORA_SOURCE='https://commons.wikimedia.org/wiki/File:Northern_lights_curtains_and_beams_over_Nordmo_in_Bjerkvik,_Narvik,_Nordland,_Norway,_2023_September_-_3.jpg'
-ART='https://ems.dimu.org/image/012uN1buK4ge?dimension=800x800'
+ART='assets/photos/tranoy-art.webp'
 ART_SOURCE='https://digitaltmuseum.no/021085513195/fantastisk-steinskulptur-pa-tranoy-tanker-for-to/media?slide=0'
 
 def link(url,label,cls='text-link'):
  return f'<a class="{cls}" href="{E(url,quote=True)}" target="_blank" rel="noopener noreferrer">{label} <span aria-hidden="true">↗</span></a>'
 
 def picture(src,alt,cls='',w=640,h=853,eager=False):
- return f'<img class="{cls}" src="{E(src,quote=True)}" alt="{E(alt,quote=True)}" width="{w}" height="{h}" loading="{"eager" if eager else "lazy"}" decoding="async"'+(' fetchpriority="high"' if eager else '')+'>'
+ return f'<img class="{cls}" src="{E(src,quote=True)}" alt="{E(alt,quote=True)}" width="{w}" height="{h}" loading="{"eager" if eager else "lazy"}" decoding="async"'+(' fetchpriority="high"' if eager else ' fetchpriority="low"')+'>'
 
 def heading(kicker,title,intro='',id=''):
  return f'<div class="editorial-head"'+(f' id="{id}"' if id else '')+f'><div><p class="eyebrow">{kicker}</p><h2>{title}</h2></div>'+ (f'<p class="section-intro">{intro}</p>' if intro else '')+'</div>'
@@ -123,10 +123,12 @@ def build(lang,c):
  soup=BeautifulSoup(src,'html.parser')
  original_explore=soup.select_one('#explore')
  oldcards=original_explore.select('.feature-place')
- tranoyimg=oldcards[0].img['src']
+ tranoyimg='assets/photos/tranoy-lighthouse.webp'
  tranoycredit=str(oldcards[0].select_one('.photo-credit'))
- for a in oldcards[1:]:
-  for img in a.select('img'): img['width']='960';img['height']='540';img['decoding']='async';img['loading']='lazy'
+ local_more=['assets/photos/hamaroyskaftet.webp','assets/photos/hamsun-centre.webp','assets/photos/hellmobotn.webp']
+ for a,local_src in zip(oldcards[1:],local_more):
+  for img in a.select('img'):
+   img['src']=local_src;img['width']='960';img['height']='540';img['decoding']='async';img['loading']='lazy';img['fetchpriority']='low'
  morecards=''.join(map(str,oldcards[1:]))
  remaining=[]
  for d in original_explore.select('details.place'):
