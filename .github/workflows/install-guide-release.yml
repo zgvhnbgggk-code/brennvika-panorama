@@ -71,13 +71,14 @@ jobs:
           assert 'MutationObserver(' not in Path('guide-v3.js').read_text()
           print('All language pages, anchors, photos and static sections validated.')
           PY
+          python tools/add_visual_cards.py
       - name: Commit the tested static pages
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm -r .guide-release
-          git add index.html no.html de.html guide-v3.css guide-v3.js README.md tools/build_guide.py assets/photos assets/wifi-qr.png
-          git commit -m 'Publish static multilingual guide with original fishing photos and no render loops'
+          git add index.html no.html de.html guide-v3.css guide-v3.js README.md tools/build_guide.py tools/add_visual_cards.py assets/photos assets/wifi-qr.png
+          git commit -m 'Publish static multilingual guide with real-source explore imagery'
           git push origin HEAD:main
       - name: Request GitHub Pages build
         env:
