@@ -1,0 +1,60 @@
+name: Remove duplicate emergency block
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/remove-duplicate-emergency.yml']
+permissions:
+  contents: write
+  pages: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Remove duplicate emergency card from contact section
+        run: |
+          python -m pip install --disable-pip-version-check beautifulsoup4
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          for lang in ['en','no','de']:
+              path=Path(f'sections/{lang}-2.html')
+              soup=BeautifulSoup(path.read_text(),'html.parser')
+              helpsec=soup.find(id='help')
+              if helpsec is None:
+                  raise SystemExit(f'Missing help section in {path}')
+              cards=helpsec.select('div.card.danger')
+              if len(cards)!=1:
+                  raise SystemExit(f'Expected one duplicate emergency card in {path}, found {len(cards)}')
+              cards[0].decompose()
+              path.write_text(str(soup))
+          PY
+      - name: Rebuild guide
+        run: |
+          python tools/build_guide.py
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          for name in ['index.html','no.html','de.html']:
+              soup=BeautifulSoup(Path(name).read_text(),'html.parser')
+              helpsec=soup.find(id='help')
+              safety=soup.find(id='safety')
+              assert helpsec is not None and safety is not None
+              assert not helpsec.select('div.card.danger'), f'duplicate emergency card remains in {name}'
+              assert safety.select('.emergency-grid'), f'emergency numbers missing from safety in {name}'
+          print('Emergency numbers appear only in the safety section on all languages.')
+          PY
+      - name: Commit cleanup
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/remove-duplicate-emergency.yml
+          git add sections/en-2.html sections/no-2.html sections/de-2.html index.html no.html de.html
+          git commit -m 'Remove duplicate emergency numbers from contact section'
+          git push origin HEAD:main
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
