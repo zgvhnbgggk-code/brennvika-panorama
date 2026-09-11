@@ -1,0 +1,103 @@
+name: Fix Brennvik Panorama brand name
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fix-brand-name.yml']
+permissions:
+  contents: write
+  pages: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Update source templates and static pages
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check beautifulsoup4==4.14.3
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.')
+
+          # Future-proof the static builder: whatever legacy source text says,
+          # generated pages must use the approved brand spelling per language.
+          p=Path('tools/build_guide.py')
+          s=p.read_text()
+          marker='# BP_BRAND_NAME_V1'
+          if marker not in s:
+              s += r'''
+
+# BP_BRAND_NAME_V1
+# Canonical brand spelling: Norwegian = "Brennvik panorama";
+# English/German = "Brennvik Panorama". Never publish "Brennvika".
+for _page,_brand in (("index.html","Brennvik Panorama"),("no.html","Brennvik panorama"),("de.html","Brennvik Panorama")):
+    _p=ROOT/_page
+    if _p.exists():
+        _t=_p.read_text()
+        _t=_t.replace("Brennvika Panorama",_brand).replace("Brennvika",_brand)
+        _p.write_text(_t)
+'''
+              p.write_text(s)
+
+          # Correct language-specific source fragments too, so later refactors do not
+          # reintroduce the old name before the final build post-process.
+          for path in Path('sections').glob('*.html'):
+              text=path.read_text()
+              if path.name.startswith('no-'):
+                  brand='Brennvik panorama'
+              elif path.name.startswith('de-'):
+                  brand='Brennvik Panorama'
+              else:
+                  brand='Brennvik Panorama'
+              text=text.replace('Brennvika Panorama',brand).replace('Brennvika',brand)
+              path.write_text(text)
+
+          # Runtime copy-address fallback and documentation.
+          js=Path('guide-v3.js')
+          js.write_text(js.read_text().replace('Brennvika Panorama','Brennvik Panorama').replace('Brennvika','Brennvik Panorama'))
+          readme=Path('README.md')
+          if readme.exists():
+              readme.write_text(readme.read_text().replace('Brennvika Panorama','Brennvik panorama').replace('Brennvika','Brennvik panorama'))
+          PY
+      - name: Rebuild and keep the current visual polish
+        run: |
+          set -euo pipefail
+          python tools/build_guide.py
+          python tools/add_visual_cards.py
+          node --check guide-v3.js
+      - name: Validate canonical spelling
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          checks={
+            'index.html':'Brennvik Panorama',
+            'no.html':'Brennvik panorama',
+            'de.html':'Brennvik Panorama',
+          }
+          for name,brand in checks.items():
+              text=Path(name).read_text()
+              assert 'Brennvika' not in text,(name,'old spelling remains')
+              assert brand in text,(name,'canonical brand missing')
+              soup=BeautifulSoup(text,'html.parser')
+              assert soup.title and 'Brennvika' not in soup.title.get_text()
+              print(name,'OK',brand)
+          assert 'Brennvika' not in Path('guide-v3.js').read_text()
+          PY
+      - name: Commit canonical brand spelling
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/fix-brand-name.yml
+          git add tools/build_guide.py guide-v3.js README.md sections index.html no.html de.html guide-v3.css
+          git commit -m 'Standardize Brennvik Panorama brand spelling'
+          git push origin HEAD:main
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
