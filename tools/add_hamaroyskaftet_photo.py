@@ -2,7 +2,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[1]
-PHOTO = "assets/photos/hamaroyskaftet-guided-ascent.webp"
+PHOTO = "assets/photos/hamaroyskaftet-guided-ascent-v2.avif"
 
 COPY = {
     "en": {
@@ -21,18 +21,17 @@ COPY = {
 
 CSS = r'''
 
-/* BP Hamarøyskaftet gallery: own real photo + the existing mountain overview. */
-.hamaroy-gallery{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:2px;height:360px;background:var(--line);overflow:hidden}
+/* BP Hamarøyskaftet gallery: real guided-ascent photo + existing mountain overview. */
+.hamaroy-gallery{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.75fr);gap:2px;background:var(--line);overflow:hidden;align-items:stretch}
 .hamaroy-gallery .hamaroy-main,.hamaroy-gallery .hamaroy-ascent{min-width:0;min-height:0;margin:0;position:relative;overflow:hidden;background:#d9dedc}
-.feature-place .hamaroy-gallery img{display:block;width:100%;height:100%;min-height:0;aspect-ratio:auto;object-fit:cover}
-.feature-place .hamaroy-gallery .hamaroy-main img{object-position:center center}
-.feature-place .hamaroy-gallery .hamaroy-ascent img{object-position:50% 38%}
-.hamaroy-gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 10px;background:linear-gradient(transparent,rgba(5,33,39,.78));color:#fff;font-size:10px;line-height:1.4}
+.feature-place .hamaroy-gallery .hamaroy-main img{display:block;width:100%;height:100%;min-height:100%;aspect-ratio:auto;object-fit:cover;object-position:center center}
+.feature-place .hamaroy-gallery .hamaroy-ascent img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center center}
+.hamaroy-gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:46px 12px 10px;background:linear-gradient(transparent,rgba(5,33,39,.80));color:#fff;font-size:10px;line-height:1.4}
 @media(max-width:720px){
- .hamaroy-gallery{grid-template-columns:1fr;height:auto;gap:2px}
- .feature-place .hamaroy-gallery .hamaroy-main img{height:auto;aspect-ratio:16/9}
- .feature-place .hamaroy-gallery .hamaroy-ascent img{height:auto;aspect-ratio:4/5;object-position:50% 36%}
- .hamaroy-gallery figcaption{font-size:11px;padding:42px 14px 12px}
+ .hamaroy-gallery{grid-template-columns:1fr;gap:2px}
+ .feature-place .hamaroy-gallery .hamaroy-main img{height:auto;min-height:0;aspect-ratio:16/9}
+ .feature-place .hamaroy-gallery .hamaroy-ascent img{height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center center}
+ .hamaroy-gallery figcaption{font-size:11px;padding:48px 14px 12px}
 }
 '''
 
@@ -66,8 +65,8 @@ def process_page(path: Path) -> None:
         if img:
             img["src"] = PHOTO
             img["alt"] = COPY[lang]["alt"]
-            img["width"] = "640"
-            img["height"] = "853"
+            img["width"] = "420"
+            img["height"] = "560"
             img["loading"] = "lazy"
             img["decoding"] = "async"
             img["fetchpriority"] = "low"
@@ -95,8 +94,8 @@ def process_page(path: Path) -> None:
             "img",
             src=PHOTO,
             alt=COPY[lang]["alt"],
-            width="640",
-            height="853",
+            width="420",
+            height="560",
             loading="lazy",
             decoding="async",
         )
