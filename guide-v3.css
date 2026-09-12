@@ -39,3 +39,18 @@
  .other-ideas details.visual-place summary{grid-template-columns:94px minmax(0,1fr) auto;gap:12px}
  .visual-place .place-summary-title{font-size:13px}
 }
+
+
+/* BP Hamarøyskaftet gallery: own real photo + the existing mountain overview. */
+.hamaroy-gallery{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:2px;height:360px;background:var(--line);overflow:hidden}
+.hamaroy-gallery .hamaroy-main,.hamaroy-gallery .hamaroy-ascent{min-width:0;min-height:0;margin:0;position:relative;overflow:hidden;background:#d9dedc}
+.feature-place .hamaroy-gallery img{display:block;width:100%;height:100%;min-height:0;aspect-ratio:auto;object-fit:cover}
+.feature-place .hamaroy-gallery .hamaroy-main img{object-position:center center}
+.feature-place .hamaroy-gallery .hamaroy-ascent img{object-position:50% 38%}
+.hamaroy-gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 10px;background:linear-gradient(transparent,rgba(5,33,39,.78));color:#fff;font-size:10px;line-height:1.4}
+@media(max-width:720px){
+ .hamaroy-gallery{grid-template-columns:1fr;height:auto;gap:2px}
+ .feature-place .hamaroy-gallery .hamaroy-main img{height:auto;aspect-ratio:16/9}
+ .feature-place .hamaroy-gallery .hamaroy-ascent img{height:auto;aspect-ratio:4/5;object-position:50% 36%}
+ .hamaroy-gallery figcaption{font-size:11px;padding:42px 14px 12px}
+}
