@@ -1,0 +1,65 @@
+name: Publish Hamarøyskaftet guided-ascent photo
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-hamaroyskaftet-photo.yml']
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: publish-hamaroyskaftet-photo
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Build guide and add guided-ascent photo
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check beautifulsoup4==4.14.3
+          test -s assets/photos/hamaroyskaftet-guided-ascent.webp
+          python tools/build_guide.py
+          python tools/add_visual_cards.py
+          python tools/add_hamaroyskaftet_photo.py
+          node --check guide-v3.js
+      - name: Validate Hamarøyskaftet gallery
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          expected={
+              'index.html':'A glimpse from a guided ascent of Hamarøyskaftet.',
+              'no.html':'Et glimt fra en guidet tur opp Hamarøyskaftet.',
+              'de.html':'Ein Eindruck von einer geführten Besteigung des Hamarøyskaftet.',
+          }
+          for name,caption in expected.items():
+              soup=BeautifulSoup(Path(name).read_text(),'html.parser')
+              gallery=soup.select_one('.hamaroy-gallery')
+              assert gallery, f'missing gallery in {name}'
+              imgs=gallery.find_all('img')
+              assert len(imgs)==2, (name,len(imgs))
+              assert imgs[1].get('src')=='assets/photos/hamaroyskaftet-guided-ascent.webp'
+              assert imgs[1].get('loading')=='lazy'
+              assert caption in gallery.get_text(' ',strip=True)
+              assert 'Brennvika' not in Path(name).read_text(), f'old brand spelling in {name}'
+          assert 'BP Hamarøyskaftet gallery' in Path('guide-v3.css').read_text()
+          print('Hamarøyskaftet two-photo gallery validated in EN/NO/DE')
+          PY
+      - name: Commit and publish
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/apply-hamaroyskaftet-photo.yml
+          git add index.html no.html de.html guide-v3.css tools/add_hamaroyskaftet_photo.py assets/photos/hamaroyskaftet-guided-ascent.webp
+          git commit -m 'Add guided Hamarøyskaftet ascent photo to guest guide'
+          git push origin HEAD:main
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
