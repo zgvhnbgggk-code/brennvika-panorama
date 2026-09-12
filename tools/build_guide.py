@@ -8,6 +8,7 @@ import html, json, re
 ROOT=Path(__file__).resolve().parents[1]
 DATA={
 'en':{
+ 'returntitle':'Already dreaming of coming back?','returnlink':'View photos and availability','websitelink':'Visit our website','newtab':'opens in a new tab',
  'language':'en','guide':'Your guide to Brennvika','skip':'Skip to the guide','menu':'All sections','help':'Contact us','explore':'Explore','practical':'Your stay','arrival':'Arrival','water':'Drinking water','wifi':'Wi-Fi','checkout':'Checkout',
  'title':'Closer to the sea.<br>Further from everyday.',
  'lead':'Welcome to Brennvika Panorama. A place for slow mornings, salt air and the kind of views you keep thinking about long after you leave.',
@@ -40,6 +41,7 @@ DATA={
  'links':[('arrival','Arrival & directions'),('door','Door code'),('wifi','Wi-Fi'),('water','Drinking water & A2G'),('heating','Heating & lighting'),('house','Kitchen, laundry & waste'),('checkout','Checkout'),('leak','Water leak protection'),('safety','Safety'),('help','Contact & emergency')]
 },
 'no':{
+ 'returntitle':'Lyst til å komme tilbake?','returnlink':'Se bilder og ledige datoer','websitelink':'Besøk nettsiden','newtab':'åpnes i ny fane',
  'language':'nb','guide':'Din guide til Brennvika','skip':'Hopp til guiden','menu':'Alle temaer','help':'Kontakt oss','explore':'Opplev','practical':'Oppholdet','arrival':'Ankomst','water':'Drikkevann','wifi':'Wi-Fi','checkout':'Utsjekk',
  'title':'Nærmere havet.<br>Lenger fra hverdagen.',
  'lead':'Velkommen til Brennvika Panorama. Til langsomme morgener, salt luft og utsikter som blir med deg lenge etter at du har reist hjem.',
@@ -72,6 +74,7 @@ DATA={
  'links':[('arrival','Ankomst og veibeskrivelse'),('door','Dørkode'),('wifi','Wi-Fi'),('water','Drikkevann og A2G'),('heating','Varme og lys'),('house','Kjøkken, vask og avfall'),('checkout','Utsjekk'),('leak','Vannlekkasjesikring'),('safety','Sikkerhet'),('help','Kontakt og nødinfo')]
 },
 'de':{
+ 'returntitle':'Lust auf ein Wiedersehen?','returnlink':'Fotos und freie Termine ansehen','websitelink':'Unsere Website besuchen','newtab':'öffnet in einem neuen Tab',
  'language':'de','guide':'Ihr Guide für Brennvika','skip':'Zum Guide springen','menu':'Alle Themen','help':'Kontakt','explore':'Entdecken','practical':'Ihr Aufenthalt','arrival':'Anreise','water':'Trinkwasser','wifi':'WLAN','checkout':'Check-out',
  'title':'Näher am Meer.<br>Weiter weg vom Alltag.',
  'lead':'Willkommen in Brennvika Panorama. Ein Ort für ruhige Morgen, salzige Meeresluft und Ausblicke, die noch lange nach der Heimreise in Erinnerung bleiben.',
@@ -111,6 +114,11 @@ ART_SOURCE='https://digitaltmuseum.no/021085513195/fantastisk-steinskulptur-pa-t
 
 def link(url,label,cls='text-link'):
  return f'<a class="{cls}" href="{E(url,quote=True)}" target="_blank" rel="noopener noreferrer">{label} <span aria-hidden="true">↗</span></a>'
+
+WEBSITE_URL = 'https://brennvikpanorama.no/'
+
+def website_link(label, newtab, cls='text-link'):
+ return f'<a class="{cls}" href="{WEBSITE_URL}" target="_blank" rel="noopener noreferrer" aria-label="{E(label + " – " + newtab,quote=True)}">{E(label)} <span aria-hidden="true">↗</span></a>'
 
 def picture(src,alt,cls='',w=640,h=853,eager=False):
  return f'<img class="{cls}" src="{E(src,quote=True)}" alt="{E(alt,quote=True)}" width="{w}" height="{h}" loading="{"eager" if eager else "lazy"}" decoding="async"'+(' fetchpriority="high"' if eager else ' fetchpriority="low"')+'>'
@@ -168,7 +176,7 @@ def build(lang,c):
 <main id="main"><section class="hero" id="welcome">{picture('assets/photos/coast-summer.avif','',cls='hero-photo',w=1000,h=786,eager=True)}<div class="hero-shade"></div><div class="hero-inner"><p class="eyebrow">{c['kicker']}</p><h1>{c['title']}</h1><p class="hero-lead">{c['lead']}</p><div class="hero-actions"><a class="button light" href="#explore">{c['herocta']} <span aria-hidden="true">↗</span></a><a class="button outline" href="#arrival">{c['secondcta']}</a></div></div><p class="hero-credit">{c['credit']}</p></section>
 <section class="intro-section"><div class="wrap">{heading(c['guide'],c['introtitle'],c['intro'])}<div class="experience-pills">'''+''.join(f'<span>{p}</span>' for p in c['pills'])+f'''</div><div class="quick-grid">{quick}</div></div></section>
 {experiences}<section class="practical-intro section" id="practical"><div class="wrap">{heading(c['practical'],c['practicaltitle'],c['practicalintro'])}<nav class="topic-grid" aria-label="{c['contents']}">{menu}</nav></div></section>{practical}
-<section class="closing-section"><div class="wrap"><p class="eyebrow">Brennvika Panorama</p><h2>{c['endtitle']}</h2><p>{c['endtext']}</p><a class="button dark" href="#help">{c['help']} ↗</a></div></section></main><footer class="footer"><div class="wrap footer-grid"><div><img src="assets/logo.webp" alt="Skoglund Heim AS" width="360" height="120" loading="lazy"><h3>Brennvika Panorama</h3><p>Brennvikveien 37 · 8294 Hamarøy · Norway</p><p>{c['foot']}</p></div><div><p>{c['updated']}</p><a href="#welcome">{c['top']} ↑</a><p><a href="#help">{c['help']}</a> · <a href="#safety">110 / 112 / 113</a></p></div></div></footer></body></html>'''
+<section class="closing-section"><div class="wrap"><p class="eyebrow">Brennvika Panorama</p><h2>{c['endtitle']}</h2><p>{c['endtext']}</p><a class="button dark" href="#help">{c['help']} ↗</a><p class="return-visit">{c['returntitle']}<br/>{website_link(c['returnlink'],c['newtab'])}</p></div></section></main><footer class="footer"><div class="wrap footer-grid"><div><img src="assets/logo.webp" alt="Skoglund Heim AS" width="360" height="120" loading="lazy"><h3>Brennvika Panorama</h3><p>Brennvikveien 37 · 8294 Hamarøy · Norway</p><p>{c['foot']}</p><p>{website_link(c['websitelink'],c['newtab'],'website-link')}</p></div><div><p>{c['updated']}</p><a href="#welcome">{c['top']} ↑</a><p><a href="#help">{c['help']}</a> · <a href="#safety">110 / 112 / 113</a></p></div></div></footer></body></html>'''
  # HTML whitespace only, never minify content or touch instructions.
  doc=re.sub(r'>\s+<','><',doc)
  out=ROOT/({'en':'index.html','no':'no.html','de':'de.html'}[lang]);out.write_text(doc)
