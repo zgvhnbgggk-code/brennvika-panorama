@@ -1,0 +1,12 @@
+{
+  "website_id": 667832,
+  "rental_id": 828625,
+  "slug": "dan-skoglund",
+  "checkout": "https://checkout.lodgify.com/en/dan-skoglund/828625/reservation?currency=NOK",
+  "source": "https://brennvikpanorama.no/en/overview",
+  "script": "https://app.lodgify.com/book-now-box/stable/renderBookNowBox.js",
+  "verified_on": "2026-09-12",
+  "language_note": "Lodgify website currently supports English; Norwegian outer labels are translated locally.",
+  "embed_no": "<div id=\"lodgify-book-now-box\" data-rental-id=\"828625\" data-website-id=\"667832\" data-slug=\"dan-skoglund\" data-language-code=\"en\" data-currency-code=\"NOK\" data-version=\"stable\" data-new-tab=\"true\" data-hide-minimum-price=\"true\" data-check-in-label=\"Innsjekk\" data-check-out-label=\"Utsjekk\" data-guests-singular-label=\"{{NumberOfGuests}} gjest\" data-guests-plural-label=\"{{NumberOfGuests}} gjester\" data-total-price-label=\"Totalpris:\" data-select-dates-to-see-price-label=\"Velg datoer for å se totalpris\" data-book-button-label=\"Fortsett til bestilling\"><p class=\"booking-status\" role=\"status\">Henter ledige datoer …</p></div><script src=\"https://app.lodgify.com/book-now-box/stable/renderBookNowBox.js\" defer></script>",
+  "embed_en": "<div id=\"lodgify-book-now-box\" data-rental-id=\"828625\" data-website-id=\"667832\" data-slug=\"dan-skoglund\" data-language-code=\"en\" data-currency-code=\"NOK\" data-version=\"stable\" data-new-tab=\"true\" data-hide-minimum-price=\"true\" data-check-in-label=\"Check-in\" data-check-out-label=\"Check-out\" data-guests-singular-label=\"{{NumberOfGuests}} guest\" data-guests-plural-label=\"{{NumberOfGuests}} guests\" data-total-price-label=\"Total price:\" data-select-dates-to-see-price-label=\"Select dates to see the total price\" data-book-button-label=\"Continue to booking\"><p class=\"booking-status\" role=\"status\">Loading available dates …</p></div><script src=\"https://app.lodgify.com/book-now-box/stable/renderBookNowBox.js\" defer></script>"
+}
