@@ -34,5 +34,11 @@
     "Validate live availability, price and checkout summary",
     "Mobile visual and touch testing"
   ],
-  "domain_cutover": "Not performed"
+  "domain_cutover": "Not performed",
+  "image_sizing_update": {
+    "status": "Prepared for preview upload; not yet deployed",
+    "observed_defect": "Booking photograph rendered at 450 x 900 CSS pixels despite a landscape source, due to the HTML height attribute remaining fixed while CSS changed width",
+    "changes": "Auto image height and natural aspect ratios for content photographs; gallery columns accommodate portrait and landscape originals without cropping",
+    "remaining": "Visual verification on the uploaded preview, including a real mobile device"
+  }
 }

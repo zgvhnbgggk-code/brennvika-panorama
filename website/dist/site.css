@@ -2,4 +2,38 @@
 
 .gallery-card{text-decoration:none}.gallery-card:first-child figure{height:100%}.gallery-grid.filtered .gallery-card:first-child figure{height:auto}
 
+/* Scale photographs from their intrinsic proportions, including HTML height hints. */
+img{height:auto}
+.photo-pair img,
+.photo-pair figure:nth-child(2) img,
+.story-split img,
+.photo-strip img,
+.wide-photo img,
+.room-photo img,
+.gallery-card img,
+.gallery-card:first-child img,
+.gallery-grid.filtered .gallery-card:first-child img,
+.experience-image img,
+.map-panel img,
+.booking-info>img{
+  height:auto;
+  min-height:0;
+  max-height:none;
+  aspect-ratio:auto;
+  object-fit:contain;
+}
+
+/* Let portrait and landscape photographs keep their whole frame in the gallery. */
+.gallery-grid{display:block;columns:3;column-gap:20px}
+.gallery-card{display:inline-block;vertical-align:top;break-inside:avoid;margin:0 0 28px}
+.gallery-card:first-child figure{height:auto}
+@media(max-width:700px){
+  .gallery-grid{columns:2;column-gap:16px}
+  .gallery-card{margin-bottom:24px}
+}
+@media(max-width:480px){
+  .gallery-grid{columns:1}
+  .gallery-card figcaption{font-size:14px}
+}
+
 #lodgify-book-now-box{--ldg-bnb-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ldg-bnb-background:transparent;--ldg-bnb-color-primary:#12343c;--ldg-bnb-color-primary-contrast:#f6f2e9;--ldg-bnb-color-primary-darker:#226777;--ldg-bnb-padding:0;--ldg-bnb-border-radius:0;--ldg-bnb-box-shadow:none;--ldg-bnb-button-border-radius:4px;width:100%;min-height:260px}#lodgify-book-now-box [data-testid="book-now-box"]{width:100%;max-width:100%;border:0}#lodgify-book-now-box [data-testid="book-now-box.cta-button"]{min-height:50px;font-size:15px;text-decoration:none}
