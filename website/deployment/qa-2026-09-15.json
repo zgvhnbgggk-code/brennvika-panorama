@@ -5,7 +5,7 @@
   "preview_branch": "preview",
   "preview_url": "https://preview.brennvik-panorama.pages.dev/",
   "initial_deployment_url": "https://748a93ff.brennvik-panorama.pages.dev",
-  "latest_deployment_url": "https://4b319075.brennvik-panorama.pages.dev",
+  "latest_deployment_url": "https://0ae36406.brennvik-panorama.pages.dev",
   "latest_deployment_confirmation": "Owner supplied successful Wrangler upload output; updated behavior verified on preview alias",
   "desktop_browser_width": 1363,
   "live_checks_passed": [
@@ -36,9 +36,16 @@
   ],
   "domain_cutover": "Not performed",
   "image_sizing_update": {
-    "status": "Prepared for preview upload; not yet deployed",
+    "status": "Uploaded by owner and verified on Cloudflare preview alias",
     "observed_defect": "Booking photograph rendered at 450 x 900 CSS pixels despite a landscape source, due to the HTML height attribute remaining fixed while CSS changed width",
     "changes": "Auto image height and natural aspect ratios for content photographs; gallery columns accommodate portrait and landscape originals without cropping",
-    "remaining": "Visual verification on the uploaded preview, including a real mobile device"
+    "live_checks_passed": [
+      "Booking photograph renders in full at 450 x 337 CSS pixels, confirmed visually",
+      "All 31 gallery photographs preserve original aspect ratios and use contain",
+      "Portrait and landscape gallery layout inspected visually",
+      "Outdoor filter still returns 7 photographs",
+      "No horizontal page overflow at 1363 pixel desktop viewport"
+    ],
+    "remaining": "Visual verification on a real mobile device"
   }
 }
