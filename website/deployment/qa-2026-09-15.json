@@ -5,6 +5,8 @@
   "preview_branch": "preview",
   "preview_url": "https://preview.brennvik-panorama.pages.dev/",
   "initial_deployment_url": "https://748a93ff.brennvik-panorama.pages.dev",
+  "latest_deployment_url": "https://4b319075.brennvik-panorama.pages.dev",
+  "latest_deployment_confirmation": "Owner supplied successful Wrangler upload output; updated behavior verified on preview alias",
   "desktop_browser_width": 1363,
   "live_checks_passed": [
     "Norwegian home rendering and hero image",
@@ -12,9 +14,13 @@
     "Outdoor filter returns 7 photographs",
     "Lightbox opens and advances to next image",
     "Escape closes lightbox",
-    "English gallery and cabin navigation"
+    "English gallery and cabin navigation",
+    "Live booking checkout links use NOK on Norwegian and English pages",
+    "Norwegian guest label no longer contains a template placeholder",
+    "Failure notice remains visible after Lodgify widget crashes",
+    "Fallback checkout link retains arrival 2026-09-20, departure 2026-09-22 and adults=1"
   ],
-  "live_booking_result": "Official widget renders, initially builds EUR checkout URL and crashes after selection of two dates in this test browser.",
+  "live_booking_result": "Updated preview uses NOK checkout links. Official widget still crashes after selection of two dates in this test browser, but independent failure feedback appears and the fallback link preserves the selected dates and guest count. Live price and checkout remain unverified.",
   "provider_error": "TypeError: Cannot read properties of undefined (reading 'title') in renderBookNowBox.js",
   "local_fix_tests_passed": [
     "NOK checkout links",
@@ -25,8 +31,6 @@
     "English loading timeout"
   ],
   "remaining": [
-    "Upload booking guard update to existing Pages preview",
-    "Verify guard in live browser",
     "Validate live availability, price and checkout summary",
     "Mobile visual and touch testing"
   ],

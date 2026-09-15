@@ -2,12 +2,12 @@
 
 Dette er den eksisterende nettsiden, ferdig bygget med alle 31 galleribilder og norsk/engelsk innhold. Hele `dist` følger med. Du trenger ikke Python, bildeverktøy eller et nytt nettsideprosjekt for å publisere pakken.
 
-## Siste status – etter første publisering
+## Siste status – etter bookingoppdateringen
 
-Pages-prosjektet `brennvik-panorama` er opprettet og første forhåndsvisning er publisert:
+Pages-prosjektet `brennvik-panorama` er opprettet og bookingoppdateringen er publisert:
 
 - https://preview.brennvik-panorama.pages.dev/
-- https://748a93ff.brennvik-panorama.pages.dev
+- https://4b319075.brennvik-panorama.pages.dev
 
 Ikke opprett prosjektet på nytt. Videre oppdateringer lastes opp med `pages deploy .\dist --project-name brennvik-panorama --branch preview` fra nettsidemappen.
 
@@ -15,7 +15,7 @@ Kontrollert i den publiserte versjonen: forside på PC, galleri med 31 bilder, b
 
 Lodgify-feltet forsvant etter datovalg i testnettleseren. Feilloggen viste `Cannot read properties of undefined (reading 'title')` i leverandørens skript. Bestillingslenken startet med EUR før feilen. Årsaken til det mislykkede prisoppslaget er ikke avklart; leverandørens checkout viste tidligere sikkerhetsverifisering i samme testmiljø.
 
-Kildekoden har nå en egen feilbeskjed utenfor Lodgifys komponent. Den vises også hvis komponenten krasjer etter innlasting. Bestillingslenkene får NOK og beholder eventuelle datoer og gjesteantall. Gjesteetikettene er ryddet opp. Oppdateringen må lastes opp til det eksisterende Pages-prosjektet og testes der. Hele bookingløpet er fortsatt ikke godkjent, og hoveddomenet skal ikke flyttes ennå.
+Bookingoppdateringen er lastet opp og kontrollert på forhåndsvisningen. Bestillingslenkene bruker NOK på norsk og engelsk. Etter datovalg 20.–22. september 2026 krasjet Lodgify-feltet fortsatt i testnettleseren, men den nye feilbeskjeden ble synlig og direktelenken beholdt begge datoene og én gjest. Den norske gjesteetiketten viser «gjest» uten en ubehandlet tekstmal. Hele bookingløpet er fortsatt ikke godkjent, og hoveddomenet skal ikke flyttes ennå. Neste nødvendige kontroll er mobilvisning og at pris samt siste oppsummering før bestilling fungerer i en vanlig nettleser.
 
 ## Opprinnelig klargjøring 15. september 2026
 
