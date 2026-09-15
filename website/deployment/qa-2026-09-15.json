@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-15",
+  "provider": "Cloudflare Pages",
+  "project": "brennvik-panorama",
+  "preview_branch": "preview",
+  "preview_url": "https://preview.brennvik-panorama.pages.dev/",
+  "initial_deployment_url": "https://748a93ff.brennvik-panorama.pages.dev",
+  "desktop_browser_width": 1363,
+  "live_checks_passed": [
+    "Norwegian home rendering and hero image",
+    "Gallery displays 31 photographs",
+    "Outdoor filter returns 7 photographs",
+    "Lightbox opens and advances to next image",
+    "Escape closes lightbox",
+    "English gallery and cabin navigation"
+  ],
+  "live_booking_result": "Official widget renders, initially builds EUR checkout URL and crashes after selection of two dates in this test browser.",
+  "provider_error": "TypeError: Cannot read properties of undefined (reading 'title') in renderBookNowBox.js",
+  "local_fix_tests_passed": [
+    "NOK checkout links",
+    "Date and guest parameter preservation",
+    "Rejection of other checkout destinations",
+    "Fallback survives widget removal",
+    "Widget recovery restores form",
+    "English loading timeout"
+  ],
+  "remaining": [
+    "Upload booking guard update to existing Pages preview",
+    "Verify guard in live browser",
+    "Validate live availability, price and checkout summary",
+    "Mobile visual and touch testing"
+  ],
+  "domain_cutover": "Not performed"
+}

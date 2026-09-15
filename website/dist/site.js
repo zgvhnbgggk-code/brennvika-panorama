@@ -79,16 +79,4 @@
     });
   }
 
-  const bookingRoot = document.querySelector('#lodgify-book-now-box');
-  if (bookingRoot) {
-    const loading = bookingRoot.querySelector('.booking-status');
-    const unavailable = () => {
-      if (loading && loading.isConnected) loading.textContent = document.documentElement.lang === 'nb'
-        ? 'Bestillingsfeltet kunne ikke lastes. Bruk lenken nedenfor for å se ledige datoer.'
-        : 'The booking form could not load. Use the link below to check available dates.';
-    };
-    const bookingScript = document.querySelector('script[src*="renderBookNowBox"]');
-    if (bookingScript) bookingScript.addEventListener('error', unavailable);
-    setTimeout(unavailable, 18000);
-  }
 })();

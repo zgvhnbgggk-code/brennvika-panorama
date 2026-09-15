@@ -2,7 +2,22 @@
 
 Dette er den eksisterende nettsiden, ferdig bygget med alle 31 galleribilder og norsk/engelsk innhold. Hele `dist` følger med. Du trenger ikke Python, bildeverktøy eller et nytt nettsideprosjekt for å publisere pakken.
 
-## Status 15. september 2026
+## Siste status – etter første publisering
+
+Pages-prosjektet `brennvik-panorama` er opprettet og første forhåndsvisning er publisert:
+
+- https://preview.brennvik-panorama.pages.dev/
+- https://748a93ff.brennvik-panorama.pages.dev
+
+Ikke opprett prosjektet på nytt. Videre oppdateringer lastes opp med `pages deploy .\dist --project-name brennvik-panorama --branch preview` fra nettsidemappen.
+
+Kontrollert i den publiserte versjonen: forside på PC, galleri med 31 bilder, bildefiltrering, åpning, neste bilde, Escape-lukking og engelsk navigasjon. Mobilvisning er ikke kontrollert; testnettleseren tilbyr ikke størrelsesendring eller mobilmodus.
+
+Lodgify-feltet forsvant etter datovalg i testnettleseren. Feilloggen viste `Cannot read properties of undefined (reading 'title')` i leverandørens skript. Bestillingslenken startet med EUR før feilen. Årsaken til det mislykkede prisoppslaget er ikke avklart; leverandørens checkout viste tidligere sikkerhetsverifisering i samme testmiljø.
+
+Kildekoden har nå en egen feilbeskjed utenfor Lodgifys komponent. Den vises også hvis komponenten krasjer etter innlasting. Bestillingslenkene får NOK og beholder eventuelle datoer og gjesteantall. Gjesteetikettene er ryddet opp. Oppdateringen må lastes opp til det eksisterende Pages-prosjektet og testes der. Hele bookingløpet er fortsatt ikke godkjent, og hoveddomenet skal ikke flyttes ennå.
+
+## Opprinnelig klargjøring 15. september 2026
 
 - Kildekode: `zgvhnbgggk-code/brennvika-panorama`, gren `website/brennvik-panorama-preview`, mappe `website`.
 - Cloudflare-produkt: Pages, med opplasting av ferdige filer gjennom Wrangler.
