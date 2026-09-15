@@ -1,0 +1,2 @@
+/en/overview /en/cabin/ 301
+/en/availability /en/book/ 301

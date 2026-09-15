@@ -29,3 +29,9 @@ The former website contains conflicting maximum occupancy statements. The curren
 - Booking rates, limits, availability and policies: Lodgify.
 
 Source photos are real photographs; no AI imagery is used.
+
+## Cloudflare preview preparation
+
+The existing site can be uploaded to Cloudflare Pages without rebuilding its design. `wrangler.jsonc` defines the Pages output directory. Follow `deployment/README.md` for the account check and preview deployment. Run `python source/package_cloudflare.py /absolute/path/brennvik-panorama-cloudflare.zip` to validate and package the complete prebuilt site, provider-specific preview headers, redirects and upload instructions.
+
+Cloudflare publication and visual/booking approval remain pending. The September 15 environment had no available Cloudflare connector and its Wrangler was unauthenticated. No Cloudflare resources or DNS records were changed. A browser attempt at the Lodgify checkout remained on security verification after one reload; the full booking flow has not passed testing.
