@@ -1,0 +1,12 @@
+{
+  "name": "brennvik-booking-tests",
+  "private": true,
+  "scripts": {
+    "test": "node --experimental-vm-modules --test booking-*.test.mjs",
+    "test:live": "node booking-live.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0",
+    "playwright": "1.58.2"
+  }
+}

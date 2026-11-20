@@ -2,7 +2,11 @@
 
 Dette er den eksisterende nettsiden, ferdig bygget med alle 31 galleribilder og norsk/engelsk innhold. Hele `dist` følger med. Du trenger ikke Python, bildeverktøy eller et nytt nettsideprosjekt for å publisere pakken.
 
-## Siste status – etter bookingoppdateringen
+## Bestillingskontroll 20. november 2026
+
+Begge språkversjonene viste en pris som stemte med Lodgifys oppsummering. Den norske bestillingsknappen ble fulgt til siste betalingssteg med fiktive kontaktopplysninger. [Testresultater, skjermbilde og fremgangsmåte](booking-2026-11-20.md).
+
+## Status i september 2026 – etter bookingoppdateringen
 
 Pages-prosjektet `brennvik-panorama` er opprettet og bookingoppdateringen er publisert:
 
